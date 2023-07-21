@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux';
 import {cardsActions} from '../../redux/cards/cardSlice';
 import { useNavigate } from 'react-router-dom';
 import React, { useState} from "react";
-import { Container, Card, TextField, Typography, Button, Grid } from "@mui/material";
+import { Card, TextField, Typography, Button, Grid } from "@mui/material";
 import EastIcon from "@mui/icons-material/East";
 import {randomNameGenerate, routePaths} from '../../utils';
 
@@ -44,6 +44,7 @@ function SignIn(){
 
    // event handler for the "Continue" button to set user state and navigate to home page
   function continueHandler(){
+    localStorage.setItem('nickname', nickname);
     dispatch(cardsActions.saveUser(nickname));
     navigate(routePaths.home); // Redirect to the home page
   }

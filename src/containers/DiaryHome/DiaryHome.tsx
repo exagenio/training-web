@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import React, { useState, useEffect} from "react";
-import { Button, Container, TextField, Grid } from "@mui/material";
+import { Button, Container, TextField, Grid, AppBar, Box, Typography, Avatar,Grow} from "@mui/material";
+import { deepOrange} from '@mui/material/colors';
 import DiaryCard from '../../components/DiaryCard/DiaryCard';
 import { useDispatch } from 'react-redux';
 import {cardsActions} from '../../redux/cards/cardSlice';
@@ -19,6 +20,8 @@ const mainContainer = {
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "start",
+  paddingBottom:"50px",
+  overflow:"hidden",
 };
 
 const cardContainer = {
@@ -51,6 +54,7 @@ function DiaryHome() {
   //set variables to textfields and card values states
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
+  const [isVisibleForm, setVisibleForm] = useState(false);
 
   //onclick listener to get textfields value when click on submit button
   function formSubmitHandler(event: any) {
@@ -73,12 +77,18 @@ function DiaryHome() {
       ));
       setTitle("");
       setMessage("");
+      setVisibleForm(false);
     }
   };
 
   //update input value with userState
   function onchangeTitle(event: { target: { value: any } }) {
     setTitle(event.target.value);
+    if(event.target.value === ""){
+      setVisibleForm(false)
+    }else{
+      setVisibleForm(true)
+    }
   };
 
   //update input value with userState
@@ -89,22 +99,36 @@ function DiaryHome() {
   return (
     <React.Fragment>
       <Container maxWidth="xl" sx={mainContainer}>
-        <Container sx={{padding:"40px 0"}}>
-          <form onSubmit={formSubmitHandler}>
-          <Grid container spacing={2}>
-            <Grid item  xs={8} sm={10} >
-              <TextField value={title} onChange={onchangeTitle} placeholder="Enter Title" InputProps={{ style: rounded }} fullWidth></TextField>
+          <AppBar position="absolute" sx={{width:"100%", padding:"10px 20px",flexDirection:"row", justifyContent:"space-between", alignItems:"center"}} >
+            <Typography variant="h5">Dear Diary</Typography>
+            <Box sx={{display:"flex", alignItems:"center"}}>
+            <Typography  variant="body1">Hi {user}</Typography>
+            <Avatar sx={{ marginLeft:"10px",bgcolor: deepOrange[500] }}>{user.charAt(0).toUpperCase()}</Avatar>
+            </Box>
+          </AppBar>
+        <Container sx={{padding:"100px 0 50px 0"}}>
+          <Grow in>
+            <form onSubmit={formSubmitHandler}>
+            <Grid container spacing={2}>
+              <Grid item  xs={8} sm={10} >
+                <TextField value={title} onChange={onchangeTitle} placeholder="Enter Title" InputProps={{ style: rounded }} fullWidth></TextField>
+              </Grid>
+                <Grid item xs={4} sm={2}>
+                  <Button type="submit" sx={{width:"100%" }} size="large" variant="contained">
+                      Submit
+                  </Button>
+                </Grid>
+                {isVisibleForm && 
+
+              <Grow in={isVisibleForm}>
+              <Grid item xs={12}>
+                <TextField value={message} onChange={onchangeMessage} InputProps={{ sx: { borderRadius: "20px"} }} fullWidth multiline margin="normal" rows={4} placeholder="Enter Description" variant="outlined" ></TextField>
+              </Grid>
+              </Grow>
+                }
             </Grid>
-            <Grid item xs={4} sm={2}>
-              <Button type="submit" sx={{width:"100%" }} size="large" variant="contained">
-                  Submit
-              </Button>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField value={message} onChange={onchangeMessage} InputProps={{ sx: { borderRadius: "20px"} }} fullWidth multiline margin="normal" rows={4} placeholder="Enter Description" variant="outlined" ></TextField>
-            </Grid>
-          </Grid>
-          </form>
+            </form>
+          </Grow>
         </Container>
 
         <Container maxWidth="xl" sx={cardContainer}>

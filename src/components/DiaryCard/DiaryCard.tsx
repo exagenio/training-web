@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {Card, Typography, Button } from "@mui/material";
+import {Card, Typography, Button, Grow } from "@mui/material";
 import { styled} from '@mui/system';
 
 //set styles to cards
@@ -7,8 +7,8 @@ const StyledCard = styled(Card)({
     width:260,
     margin:'5px',
     borderRadius:'12px',
-    padding:"15px",
-    minHeight:200,
+    padding:"20px",
+    minHeight:205,
     height: "fit-content"
 });
 
@@ -19,8 +19,8 @@ const StyledSubTitle = styled(Typography)({
 
 function DairyCard(props: { description: any; title: any; subTitle: any; }) {
     let description  = props.description; //get the description from the props
-    let [isGreater, setIsGreater] = useState(description.length > 100) //variable to check the paragh length and create a state
-    
+    let [isGreater, setIsGreater] = useState(description.length > 100); //variable to check the paragh length and create a state
+    let [isExpanded, setExpanded] = useState(false);
     //initialize limited text
     let limitedText = "";
 
@@ -32,17 +32,26 @@ function DairyCard(props: { description: any; title: any; subTitle: any; }) {
     //show limited text when click on show more button
     function clickShowHandler(){
         setIsGreater(false);
+        setExpanded(true);
+    }
+
+    function clickHideHandler(){
+        setExpanded(false);
+        setIsGreater(true);
     }
 
     return (
-    <StyledCard variant="outlined">
-        <Typography variant="h5"> {props.title} </Typography>
-        <StyledSubTitle variant="subtitle1"> {props.subTitle} </StyledSubTitle>
-        <Typography variant="body1"> </Typography>
-        {!isGreater && <Typography variant="body1">{description}</Typography>}
-        {isGreater && <Typography variant="body1">{limitedText}</Typography>}
-        {isGreater && <Button onClick={clickShowHandler}>Show More</Button>}
-    </StyledCard>
+        <Grow in>
+            <StyledCard variant="outlined">
+                <Typography variant="h5"> {props.title} </Typography>
+                <StyledSubTitle variant="subtitle1"> {props.subTitle} </StyledSubTitle>
+                <Typography variant="body1"> </Typography>
+                {!isGreater && <Typography variant="body1">{description}</Typography>}
+                {isGreater && <Typography variant="body1">{limitedText}</Typography>}
+                {isGreater &&!isExpanded && <Button onClick={clickShowHandler}>Show More</Button>}
+                {isExpanded &&<Button onClick={clickHideHandler}>Hide</Button>}
+            </StyledCard>     
+        </Grow>
     );
 }
 export default DairyCard;

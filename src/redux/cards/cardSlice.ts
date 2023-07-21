@@ -2,7 +2,7 @@ import { createSlice} from '@reduxjs/toolkit';
 
 //create interface to accept string values to state user
 interface UserState {
-    user: string,
+    user: string | null,
     cards: CardData[];
 };
 
@@ -12,8 +12,10 @@ interface CardData {
   title: string;
   description: string;
 }
+
+const nickname = localStorage.getItem('nickname');
   
-const initialState: UserState = { user: "demo", cards:[] };
+const initialState: UserState = { user: nickname, cards:[] };
 
 //create a slice to save the user state
 const cardSlice = createSlice({

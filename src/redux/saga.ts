@@ -38,7 +38,6 @@ function* fetchCards(): Generator<any, any, any> {
     while (true) {
       const cards: CardData[] = yield take(channel);
       yield put(cardsActions.getCards(cards));
-      console.log("working")
     }
   } finally {
   }
